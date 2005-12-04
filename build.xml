@@ -1,4 +1,4 @@
-<project name="antdoclett" default="dist" basedir=".">
+<project name="antdoclet" default="dist" basedir=".">
 
 	<description>
 		This is the main build script for AntDoclet, a tool to automatically generate documentation
@@ -98,7 +98,9 @@
 		</copy>
 
 		<delete file="${dist.target}.zip" />
-		<zip destfile="${dist.target}.zip" basedir="${dist.home}" />
+		<zip destfile="${dist.target}.zip" basedir="${dist.home}" >
+			<include name="${dist.name}/**" />
+		</zip>
 
 	</target>
 
