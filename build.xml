@@ -122,8 +122,6 @@
 	<target name="web">
 		<mkdir dir="web"/>
 
-		<copy file="src/web/header.html" tofile="web/README.html" />
-
 		<concat destfile="web/index.html" append="false">
 
 			<header filtering="no" file="src/web/header.html" />
