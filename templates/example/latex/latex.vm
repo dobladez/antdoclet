@@ -56,7 +56,7 @@ This Task accepts text in its element body.
     				#### section of those)
     				####
     				#if( $elementDoc.sourceIncluded() && ((!$elementDoc.isInnerClass() && $elementDoc.isTagged()) || $elementDoc.getNestedElements().hasMoreElements()))
-    \item \texttt{\textbf{<$element>}} -- {\smaller\itshape{}(See \nameref{#latexref($elementDoc)} \pageref{#latexref($elementDoc)})}
+    \item \texttt{\textbf{<$element>}} -- {\smaller\itshape{}(See \nameref{#latexref($elementDoc)} on page \pageref{#latexref($elementDoc)})}
 					#else
     \item \texttt{\textbf{<$element>}}
 					    #if ( ! $elementDoc.sourceIncluded() )
