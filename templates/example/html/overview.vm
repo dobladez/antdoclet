@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html>
+<head>
+  <title>$title</title>
+  <link rel="stylesheet" type="text/css" href="style.css" />
+
+</head>
+<body>
+
+<h1>$title - Reference Documentation</h1>
+
+<p>This is just an example "overview" page for you Ant Tasks documentation.</p>
+<p>In order to modify this content, edit the <code>templates/example/html/overview.vm</code> file.</p>
+
+<h3>Requirements</h3>
+<p>You may want to clarify the version of Ant your Tasks depend on... Say: Ant 1.6.1 or newer, and it
+relies on the <b>namespace</b> and <b>antlib</b> features included in
+Ant version 1.6.</p>
+
+<h3>Using My Tasks</h3>
+<p>You may also want provide a short snippet with a small but complete example of how
+to use your Tasks:</p>
+
+<blockquote><pre>
+&lt;!-- This script uses my Ant Tasks --&gt;
+&lt;project name=&quot;Example&quot; xmlns:mylib=&quot;antlib:package.to.my.lib&quot;&gt;
+
+  &lt;!-- Include properties --&gt;
+  &lt;property file=&quot;build.properties&quot;/&gt;
+
+  &lt;target name=&quot;do-it&quot; description=&quot;Do something with my tasks&quot;&gt;
+
+	&lt;mylib:myfirsttask argOne=&quot;true&quot; &gt;
+
+    &lt;/mylib:myfirsttask&gt;
+
+  &lt;/target&gt;
+
+&lt;/project&gt;
+</pre></blockquote>
+
+
+<div class="copyright">
+  <hr />
+  <br />
+  <em>Copyright &copy; 2005, Fernando Dobladez.</em>
+</div>
+
+	
+</body>
+</html>

@@ -1,0 +1,81 @@
+<project name="Apache Ant Tasks" default="build" basedir=".">
+
+  <!-- Path to the source code of the ant tasks/types you want to
+       generate documentation for: -->
+  <property name="source.dir" value="/usr/local/apache-ant-1.6.5/src/main/"/>
+
+  <!-- The java packages you want to scan: -->
+  <property name="package.names"
+     value="org.apache.tools.ant.taskdefs,org.apache.tools.ant.types"/>
+
+  <!-- Location of the .jar file containing your compiled tasks/types: -->
+  <property name="jars.dir" value="/usr/local/apache-ant-1.6.5/dist/lib/"/>
+
+  <!-- Location of the templates you want to use: -->
+  <property name="templates.dir" value="${basedir}/templates/example"/>
+
+
+
+
+
+  <!-- Doclet Classpath -->
+  <path id="doclet.classpath">
+
+    <fileset id="libs" dir="${basedir}/lib">
+      <include name="**/*.jar"/>
+      <include name="."/>
+    </fileset>
+
+    <!-- IMPORTANT: Include your tasks' .jar files here! (or copy them
+                    to the lib/ directory. If you ant tasks depend on
+                    other .jar files, include those too. -->
+
+    <fileset  dir="${jars.dir}">
+      <include name="*.jar"/>
+    </fileset>
+
+  </path>
+
+
+  <!-- Run the AntDoclet to generate the Ant tasks/types documentation -->
+  <target name="build" description="Generate Ant Task/Types documentation">
+
+    <mkdir  dir="${basedir}/output/html"/>
+    <mkdir  dir="${basedir}/output/latex"/>
+
+	<!-- First copy the "static" resources (images, static html files) -->
+	<copy todir="output/html/" overwrite="true">
+		<fileset dir="${templates.dir}/html/">
+			<exclude name="*.vm"/>
+		</fileset>
+	</copy>
+	<copy todir="output/latex/">
+		<fileset dir="${templates.dir}/latex/">
+			<exclude name="*.vm"/>
+		</fileset>
+	</copy>
+  	
+	<!-- Now invoke AntDoclet to generate the "dynamic" content from the templates -->
+	<javadoc access="public"
+		sourcepath="${source.dir}"
+                destdir="${basedir}/output/html,${basedir}/output/latex"
+                packagenames="${package.names}"
+                docletpathref="doclet.classpath" source="1.4">
+
+		<doclet name="com.neuroning.antdoclet.AntDoclet">
+			<param name="-doctitle" value="${ant.project.name}" />
+			<param name="-templatesdir" value="${templates.dir}"/>
+			<param name="-templates" value="html/main.vm,latex/main.vm" />
+		</doclet>
+
+		<!-- For finer control, you may explicitly include/exclude
+                     the files you want
+		<fileset dir="${source.dir}" defaultexcludes="yes">
+			<include name="org/apache/tools/ant/taskdefs/*.java" />
+			<include name="org/apache/tools/ant/types/*.java" />
+		</fileset>
+ 		-->
+	</javadoc>
+  </target>
+
+</project>

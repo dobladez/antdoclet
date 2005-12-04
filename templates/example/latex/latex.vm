@@ -1,0 +1,92 @@
+#macro( latexref $t )
+sec:$!t.getAntCategory():$!t.getAntName()#end
+	%%
+	%% NOTE: This is an auto-generated file, created by AntDoclet.
+	%%       Do NOT modify. It will be overwritten.
+	%%
+#foreach( $category in $antroot.getCategories() )
+
+\section{$category Library}
+    #foreach( $taskDoc in $antroot.getAllByCategory($category) )
+    	## Decide for which classes we generate a separate section.
+    	## For now: all tasks, plus those types that accept nested elements or are explicitly "tagged" (have an @ant.type with a category)
+    	#if($taskDoc && ($taskDoc.isTask() || (!$taskDoc.isInnerClass() && $taskDoc.isTagged()) || $taskDoc.getNestedElements().hasMoreElements()))
+    		#if($taskDoc.isTask())
+\subsection{Task $!taskDoc.getAntCategory():$taskDoc.getAntName()}
+    			#else
+\subsection{Type $!taskDoc.getAntCategory():$taskDoc.getAntName()}
+    		#end
+\label{#latexref($taskDoc)}
+    		$html2latex.fixText("${taskDoc.getComment()}")
+\subsubsection*{Parameters:}
+    		#if(!$taskDoc.getAttributes().isEmpty())
+\begin{itemize}
+    			#foreach ($attr in $taskDoc.attributes )
+    \item \texttt{\textbf{$attr}} -- $html2latex.fixText("$taskDoc.getAttributeType($attr)")
+    				#if( $taskDoc.getAttributeRequired($attr) )
+         \textsl{Required.} $html2latex.fixText("${taskDoc.getAttributeRequired($attr)}")
+    					#elseif ( $taskDoc.getAttributeNotRequired($attr) )
+    	  \textsl{Not required.} $html2latex.fixText("${taskDoc.getAttributeNotRequired($attr)}")
+    				#end
+    	$html2latex.fixText("${taskDoc.getAttributeComment($attr)}")
+    			#end
+\end{itemize}
+    		#end
+    		#####################
+    		## Nested elements
+    		#if($taskDoc.getNestedElements().hasMoreElements() || $taskDoc.isTaskContainer() || $taskDoc.supportsCharacters())
+\subsubsection*{Parameters accepted as nested elements:}
+    			#if ($taskDoc.isTaskContainer())
+\begin{quote}
+This Task is a Container (it accepts nested Tasks).
+\end{quote}
+    			#end
+    			#if ($taskDoc.supportsCharacters())
+\begin{quote}
+This Task accepts text in its element body.
+\end{quote}
+    			#end
+\begin{list}{}{}
+    			#foreach ($element in $taskDoc.getNestedElements())
+    				#set($elementDoc = false)
+    				#set($elementDoc = $taskDoc.getElementDoc($element))
+    				####
+    				#### Put a link for those types that are in this javadoc run and
+    				#### contain more nested elements (since we are generating a separate
+    				#### section of those)
+    				####
+    				#if( $elementDoc.sourceIncluded() && ((!$elementDoc.isInnerClass() && $elementDoc.isTagged()) || $elementDoc.getNestedElements().hasMoreElements()))
+    \item \texttt{\textbf{<$element>}} -- {\smaller\itshape{}(See \nameref{#latexref($elementDoc)} \pageref{#latexref($elementDoc)})}
+					#else
+    \item \texttt{\textbf{<$element>}}
+					    #if ( ! $elementDoc.sourceIncluded() )
+           (Of type $html2latex.fixText("${elementDoc.getAntName()}"))
+					    #end
+    				#end
+            $!html2latex.fixText("${elementDoc.getComment()}")
+
+					### element's attributes
+Parameters:
+    				#if(!$elementDoc.getAttributes().isEmpty())
+\begin{itemize}
+    					#foreach ($elemAttr in $elementDoc.attributes )
+    \item \texttt{\textbf{$elemAttr}} -- $html2latex.fixText("${elementDoc.getAttributeType($elemAttr)}")
+    						#if( $elementDoc.getAttributeRequired($elemAttr) )
+           \textsl{Required.} $html2latex.fixText("${elementDoc.getAttributeRequired($elemAttr)}")
+    							#elseif ( $elementDoc.getAttributeNotRequired($elemAttr) )
+    	    \textsl{Not required.} $html2latex.fixText("${elementDoc.getAttributeNotRequired($elemAttr)}")
+    						#end
+    					#end
+            $html2latex.fixText("${elementDoc.getAttributeComment($elemAttr)}")
+\end{itemize}
+    				#end
+    				### element's attributes end
+    			#end
+    \item % force at least one \item
+\end{list}{}{}
+    		#end
+\hrule
+		#end
+	#end
+#end
+		

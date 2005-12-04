@@ -1,0 +1,149 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Latex style file for Apache documentation.
+%%
+%% Time-stamp: <2005-11-28 18:00:18 ferd> fernando@dobladez.com
+%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{apache}[2005/11/28]
+
+\RequirePackage{ifthen}
+\RequirePackage{color}
+\RequirePackage{picins}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Headers depend on one/two-sided
+\DeclareOption{oneside} {
+  \AtEndOfPackage{
+    \fancyhead[LO]{\textsl{\leftmark}}
+  }
+}
+\DeclareOption{twoside} {
+  \AtEndOfPackage{
+    \fancyhead[LO]{\textsl{\rightmark}}
+    \fancyhead[LE]{\textsl{\leftmark}}
+  }
+}
+
+
+\ProcessOptions\relax
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% increase the textwidth a little bit (and shrink the margins accordingly)
+\addtolength{\textwidth}{2cm}
+\addtolength{\hoffset}{-1cm}
+%% increase the textheight a little bit (and shrink the margins accordingly)
+\addtolength{\textheight}{2cm}
+\addtolength{\voffset}{-1cm}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Set some spacing between paragraphs
+%% and use no indentation on first line of paragraphs
+\setlength{\parskip}{6pt} 
+\setlength{\parindent}{0cm} 
+
+\setlength{\headheight}{13.6pt} % this is for the logo to fit in the header
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% 'listings' environment. For typesetting source code and other listings
+
+% default settings
+\RequirePackage{listings}[2002/04/01]
+
+\definecolor{codebackground}{rgb}{0.90,0.90,1}
+\lstset{basicstyle=\footnotesize\ttfamily,fontadjust,%numbers=left,
+        numberstyle=\tiny,
+        stringstyle=\textsl,
+        commentstyle=\rmfamily\itshape,
+        showstringspaces=false,
+        breaklines=true, %prebreak=$\hookleftarrow$,
+        frame=single,backgroundcolor=\color{codebackground},
+        rulecolor=\color{black},
+        keywordstyle=\bfseries,
+        emphstyle=\bfseries
+      }
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Hyperref package (for pdf/html links and bookmarks)
+%% change link colors
+\RequirePackage[
+    dvips, %pdftex
+    colorlinks=true, linkcolor=blue,
+    citecolor =blue,  urlcolor=blue,
+]{hyperref}
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Change default font:
+%\RequirePackage{bookman}
+%\RequirePackage{avant} %failed
+%\RequirePackage{helvet} %failed
+%\RequirePackage{newcent}
+
+\RequirePackage{palatino}
+
+%\RequirePackage{charter} 
+%\RequirePackage{chancery} 
+%\RequirePackage{palatcm} % palatino + CM
+%\RequirePackage{times}
+%\RequirePackage{utopia}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Apache logo command
+%
+% use \fuego for small logo
+%     \Fuego for large logo
+%
+\RequirePackage[dvips]{graphicx}
+
+\newsavebox{\Apachebox}
+\sbox{\Apachebox}{\includegraphics[width=.6\textwidth,keepaspectratio=true]{logo}}
+\newcommand{\Apache}{\href{http://www.apache.org}{\usebox{\Apachebox}}}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Change titlepage
+%
+\renewcommand{\maketitle}{
+  \thispagestyle{empty} % no headers/footers
+
+
+  \rule{0pt}{3cm} % make some space
+
+  % The Apache logo to the right
+  \begin{flushright}
+    \Apache\\
+  \end{flushright}
+
+  \begin{flushleft}      
+    %\rule{0pt}{-12cm} 
+    \vspace{-3cm}
+    {\Huge\scshape\bfseries \@title\par}%
+    \vspace{4pt}
+    \hrule
+    \vspace{1cm}
+    {\Large \@author\par}%
+    \vspace{.5cm}
+    {\large \@date\par}%
+  \end{flushleft}
+}
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Change header/footer
+%
+\RequirePackage{fancyhdr}
+\pagestyle{fancy}
+\fancyhead{} % clear the defaults
+\fancyfoot{} % clear the defaults
+\fancyfoot[CE,CO]{\thepage}
+

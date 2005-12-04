@@ -1,0 +1,95 @@
+\documentclass[letterpaper,11pt,oneside]{article}
+
+%% This document servers as a Template and introduction to your Ant
+%% Tasks. At the end, it includes the output of AntDoclet, which will
+%% provide all the reference documentation for your Ant tasks.
+
+
+\usepackage{apache}
+\usepackage{relsize} % \smaller and \larger commands (to change fontsize relative to the current size).
+
+% Important: The nameref, varioref and hyperref packages must be
+% loaded in that order for proper functioning.
+%
+\usepackage{nameref} % Nameref (part of Hyperref package) for referencing sections by name (instead of number)
+\usepackage{varioref} % for 'smart' references
+\usepackage{calc}     % allow for algebraic calculations in length arguments
+\usepackage{draftcopy}
+\draftcopyName{Example}{200}
+
+\lstset{escapechar=`}
+\sloppy % allow for not-so-nice linebreaks
+\usepackage[htt]{hyphenat} % Allow for TypeWriter text (ie \texttt{...}) to be hyphenated
+
+\newcommand{\webLink}[2]{\href{#2}{#1}\footnote{\href{#2}{#2}}}
+
+
+
+
+% specify the title/author
+\title{AntDoclet Example}
+\author{Fernando Dobladez\\\smaller\slshape{}fernando@dobladez.com}
+
+% set the PDF Document Info
+\hypersetup{
+  pdftitle    = {Apache Ant Integration},
+  pdfsubject  = {ANT},
+  pdfkeywords = {ant,script,automation},
+  pdfauthor   = {Fernando Dobladez},
+}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{document}
+\maketitle % generates the title page
+\newpage
+\begin{abstract}
+This document serves as reference documentation for the core Apache Ant tasks.
+
+This is NOT the official \webLink{Apache Ant}{http://ant.apache.org}
+documentation. It is exposed here just as an example of what
+\webLink{AntDoclet}{http://antdoclet.neuroning.com} can generate.
+
+\end{abstract}
+
+\tableofcontents
+\newpage
+
+
+%%%
+\section{Introduction}
+This documentation was generated running
+\webLink{AntDoclet}{http://antdoclet.neuroning.com} over the source
+code of the core Apache Ant Tasks version 1.6.5.
+
+This NOT the official \webLink{Apache Ant}{http://ant.apache.org}
+documentation. It is exposed here just as an example of what
+\webLink{AntDoclet}{http://antdoclet.neuroning.com} can generate.
+
+
+\subsection{About this example}
+The source code of the core Ant Tasks was (obviously) written without
+any knowledge of AntDoclet. Therefore, the quality of the generated
+documentation for this example is far from perfect.
+
+For instance, the source code of the core Ant Tasks do not use all the
+tags that AntDoclet supports, and some of the comments use invalid
+HTML or describe things that AntDoclet already auto-generates.
+
+To get the most out of AntDoclet the source code of your Ant Tasks
+needs to follow a few simple guidelines described in the AntDoclet
+documentation.
+
+\vspace{1cm}
+\hrule
+The following sections describe each of the provided Ant Tasks in
+more detail, including all the attributes they accept and examples of
+use.
+
+
+%%
+%% Include the output of AntDoclet (Ant Tasks reference documentation)
+%%
+\include{anttasks-reference}
+
+\end{document}

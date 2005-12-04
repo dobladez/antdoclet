@@ -1,0 +1,18 @@
+##
+## This template is the entry point for calling other templates.
+## The output of this template goes to stdout.
+##
+## Objects available in context:
+##
+##  $velocity   - Helper object for processing other templates (of type VelocityFacade)
+##  $antroot   - Contains all the Ant tasks/types (of type AntRoot)
+##  $title      - Project title (of type String)
+##
+
+AntDoclet - Running project $title
+
+## Call the actual template
+
+#set( $html2latex = $velocity.create("com.neuroning.antdoclet.latex.HTML2Latex") )
+$velocity.eval( "latex/latex.vm", "anttasks-reference.tex" )
+

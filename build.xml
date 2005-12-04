@@ -1,0 +1,147 @@
+<project name="antdoclett" default="dist" basedir=".">
+
+	<description>
+		This is the main build script for AntDoclet, a tool to automatically generate documentation
+		for your custom [Ant](http://ant.apache.org) Tasks.
+	</description>
+
+	<!-- Property Definitions ====== -->
+	<property file="build.properties" />
+
+	<!-- Directory locations =====  -->
+	<property name="build.home" value="${basedir}/build" />
+	<property name="src.home" value="${basedir}/src/java" />
+	<property name="lib.home" value="${basedir}/lib" />
+	<property name="dist.home" value="${basedir}/dist" />
+	<property name="root.home" value="${basedir}/root" />
+	<property name="templates.home" value="${basedir}/templates" />
+
+	<property name="dist.name" value="antdoclet-1.0" />
+
+
+	<!-- Compilation Classpath ===== -->
+	<path id="compile.classpath">
+		<fileset id="libs" dir="${lib.home}">
+			<include name="**/*.jar" />
+		</fileset>
+		<fileset dir="${build.home}">
+			<include name="**/*.jar" />
+		</fileset>
+	</path>
+
+
+
+	<!-- ALL Target  ===== -->
+	<target name="all" depends="clean,srcdist,dist" description="Build from scratch and create distribution bundle" />
+	<target name="init">
+
+		<mkdir dir="${build.home}" />
+		<mkdir dir="${build.home}/classes" />
+		<mkdir dir="${dist.home}" />
+
+	</target>
+
+	<!-- Clean Target ===== -->
+	<target name="clean" description="Delete old build directories">
+		<delete dir="${build.home}" />
+		<delete dir="${dist.home}" />
+		<delete dir="web" />
+		<delete file="velocity.log" />
+		<delete includeemptydirs="true">
+			<fileset dir="${basedir}">
+				<include name="output.*/**" />
+			</fileset>
+		</delete>
+	</target>
+
+
+
+	<!-- Build Target ===== -->
+	<target name="build" description="Compile all Java code" depends="init">
+
+		<javac srcdir="${src.home}" destdir="${build.home}/classes" debug="true" deprecation="true">
+
+			<include name="**/*.java" />
+			<classpath refid="compile.classpath" />
+			<classpath path="${build.home}/classes" />
+		</javac>
+
+		<jar jarfile="${build.home}/${ant.project.name}.jar">
+			<fileset dir="${build.home}/classes" />
+		</jar>
+
+	</target>
+
+
+	<!-- Dist. Target ===== -->
+	<target name="dist" description="Build a binary AntDoclet distribution" depends="build">
+
+		<property name="dist.target" value="${dist.home}/${dist.name}" />
+
+		<mkdir dir="${dist.target}" />
+
+		<copy todir="${dist.target}">
+			<fileset dir="${root.home}" />
+		</copy>
+
+		<mkdir dir="${dist.target}/lib" />
+		<copy todir="${dist.target}/lib">
+			<fileset dir="${lib.home}" />
+			<fileset dir="${build.home}">
+				<include name="*.jar" />
+			</fileset>
+		</copy>
+
+		<mkdir dir="${dist.target}/templates" />
+		<copy todir="${dist.target}/templates">
+			<fileset dir="${templates.home}" />
+		</copy>
+
+		<delete file="${dist.target}.zip" />
+		<zip destfile="${dist.target}.zip" basedir="${dist.home}" />
+
+	</target>
+
+	<!-- SrcDist. Target ===== -->
+	<target name="srcdist" description="Build a source AntDoclet distribution" depends="clean">
+
+		<property name="srcdist.target" value="${dist.home}/${dist.name}-src" />
+
+		<mkdir dir="${srcdist.target}" />
+
+		<copy todir="${srcdist.target}">
+			<fileset dir="${basedir}" />
+		</copy>
+
+		<delete file="${srcdist.target}.zip" />
+		<zip destfile="${srcdist.target}.zip" basedir="${dist.home}" />
+
+	</target>
+
+	<!-- Web Target ===== -->
+	<target name="web">
+		<mkdir dir="web"/>
+
+		<copy file="src/web/header.html" tofile="web/README.html" />
+
+		<concat destfile="web/index.html" append="false">
+
+			<header filtering="no" file="src/web/header.html" />
+			          
+			<fileset dir="root" includes="README"/>
+			<filterchain>
+				<filterreader classname="com.petebevin.markdown.MarkdownFilter">
+					<classpath refid="compile.classpath"/>
+				</filterreader>
+			</filterchain>
+
+			<footer filtering="no" file="src/web/footer.html" />
+		</concat>
+
+
+
+	</target>
+
+
+</project>
+
