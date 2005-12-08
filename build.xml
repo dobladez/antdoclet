@@ -139,10 +139,7 @@ Tasks.
 			<footer filtering="no" file="src/web/footer.html" />
 		</concat>
 
-
-
 	</target>
-
 
 </project>
 
