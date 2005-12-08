@@ -1,8 +1,9 @@
 <project name="antdoclet" default="dist" basedir=".">
 
 	<description>
-		This is the main build script for AntDoclet, a tool to automatically generate documentation
-		for your custom [Ant](http://ant.apache.org) Tasks.
+This is the main build script for AntDoclet, a tool to automatically
+generate documentation for your custom [Ant](http://ant.apache.org)
+Tasks.
 	</description>
 
 	<!-- Property Definitions ====== -->
