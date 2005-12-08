@@ -1,12 +1,6 @@
-AntDoclet 
-=========
 
 AntDoclet is a tool to automatically generate documentation out of your
 [Ant](http://ant.apache.org) Tasks' source code.
-
-
-Introduction
-------------
 
 It is implemented as a [Javadoc](http://java.sun.com/j2se/javadoc/) doclet,
 and generates reference documentation and other deliverables from the
@@ -90,7 +84,8 @@ output may be broken. Some suggestions:
 
 
 
-Thanks to [Fuego Inc.](http://fuego.com) for allowing me to publish AntDoclet.
+Thanks to [Fuego Inc.](http://fuego.com), my current employer, for allowing
+me to publish AntDoclet.
 
 Thanks,
 

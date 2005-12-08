@@ -30,12 +30,51 @@
 			padding: 2px;
 		}
 		
+
 		code {
 			font-family: monospace;
 		}
-	</style>
+
+		div#menu {
+			text-align: center;
+		}
+                ul#menulist {
+                        display: inline;
+                }
+
+                #menulist li {
+                        display: inline;
+			list-style-type: none;
+                        background: #ddd;
+                        border: 1px solid #aaa;
+                        color: #666;
+                        font-weight: bold;
+                        padding: 3px 3px;
+                }
+
+                #menulist li:hover {
+			background: #e9e9e9;
+		}
+
+		#menulist li a:hover {
+			border: none;
+			text-decoration: none;
+		}
+
+        </style>
 </head>
 <body>
-<div>
 
+<div id="menu">
+        <h1>AntDoclet<h1>
+        <ul id="menulist">
+                <li><a href="examples.html" title="Main">Example</a></li>
+                <li><a href="http://developer.berlios.de/project/showfiles.php?group_id=5451">Download</a></li>
+                <li><a href="http://svn.berlios.de/wsvn/antdoclet">Browse Source Repository</a></li>
+
+		<li><a href="http://developer.berlios.de/projects/antdoclet/">Project Page</a></li>
+	</ul>
+</div>
+
+<div id="content">
 
