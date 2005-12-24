@@ -10,12 +10,12 @@ Tasks.
 	<property file="build.properties" />
 
 	<!-- Directory locations =====  -->
-	<property name="build.home" value="${basedir}/build" />
-	<property name="src.home" value="${basedir}/src/java" />
-	<property name="lib.home" value="${basedir}/lib" />
-	<property name="dist.home" value="${basedir}/dist" />
-	<property name="root.home" value="${basedir}/root" />
-	<property name="templates.home" value="${basedir}/templates" />
+	<property name="build.home" value="build" />
+	<property name="src.home" value="src/java" />
+	<property name="lib.home" value="lib" />
+	<property name="dist.home" value="dist" />
+	<property name="root.home" value="root" />
+	<property name="templates.home" value="templates" />
 
 	<property name="dist.name" value="antdoclet-1.0" />
 
@@ -113,7 +113,9 @@ Tasks.
 		<mkdir dir="${srcdist.target}" />
 
 		<copy todir="${srcdist.target}">
-			<fileset dir="${basedir}" />
+			<fileset dir="${basedir}" >
+				<exclude name="${dist.home}*/**"/>
+			</fileset>
 		</copy>
 
 		<delete file="${srcdist.target}.zip" />
@@ -130,6 +132,19 @@ Tasks.
 			<header filtering="no" file="src/web/header.html" />
 			          
 			<fileset dir="root" includes="README"/>
+			<filterchain>
+				<filterreader classname="com.petebevin.markdown.MarkdownFilter">
+					<classpath refid="compile.classpath"/>
+				</filterreader>
+			</filterchain>
+
+			<footer filtering="no" file="src/web/footer.html" />
+		</concat>
+		<concat destfile="web/examples.html" append="false">
+
+			<header filtering="no" file="src/web/header.html" />
+			          
+			<fileset dir="src/web/" includes="examples.txt"/>
 			<filterchain>
 				<filterreader classname="com.petebevin.markdown.MarkdownFilter">
 					<classpath refid="compile.classpath"/>
