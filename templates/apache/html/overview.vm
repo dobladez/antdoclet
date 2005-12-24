@@ -20,7 +20,7 @@ as an example of what AntDoclet can generate.</p>
 <h2>About this example</h2>
 
 <p>The source code of the core Ant Tasks was
-  (obviously) written without any knowledge of AntDoclet.
+  written without any knowledge of AntDoclet.
   Therefore, the quality of the generated documentation for this
   example is far from perfect.</p>
   
@@ -37,7 +37,7 @@ as an example of what AntDoclet can generate.</p>
 <div class="copyright">
   <hr />
   <br />
-  <em>Copyright &copy; 2005, Fernando Dobladez.</em>
+  <em>Fernando Dobladez - <a href="http://neuroning.com">Neuroning</a></em>
 </div>
 
 	
