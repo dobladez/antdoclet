@@ -115,6 +115,7 @@ Tasks.
 		<copy todir="${srcdist.target}">
 			<fileset dir="${basedir}" >
 				<exclude name="${dist.home}*/**"/>
+				<exclude name="fuego*/**"/>
 			</fileset>
 		</copy>
 
