@@ -87,7 +87,9 @@ Tasks.
 
 		<mkdir dir="${dist.target}/lib" />
 		<copy todir="${dist.target}/lib">
-			<fileset dir="${lib.home}" />
+			<fileset dir="${lib.home}">
+				<exclude name="markdown*" />
+			</fileset>
 			<fileset dir="${build.home}">
 				<include name="*.jar" />
 			</fileset>
