@@ -4,7 +4,7 @@ AntDoclet is a tool to automatically generate documentation out of your
 
 It is implemented as a [Javadoc](http://java.sun.com/j2se/javadoc/) doclet,
 and generates reference documentation and other deliverables from the
-source code of you custom Ant Tasks/Types. It's been only tested with
+source code of your custom Ant Tasks/Types. It's been only tested with
 JDK 1.4.
 
 It uses template-based generation, using
