@@ -76,7 +76,7 @@ output may be broken. Some suggestions:
 
 * Make sure all HTML tags are "balanced" (properly open and close each
     tag).
-* Separate paragraphs should be writen between `<p> </p>`.
+* Separate paragraphs should be written between `<p> </p>`.
 * Use `<code> </code>` for variable and file names.
 * For displaying source code in a nice box (like code examples) use
   `<pre> </pre>`.
