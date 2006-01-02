@@ -22,9 +22,9 @@ Ant. You must change some properties to fit your needs, like the path to
 your tasks source code and compiled classes. If you need AntDoclet, I assume
 you are comfortable with Ant scripts ;-).
 
-IMPORTANT: The doclet needs access to not only the source code, but also
+IMPORTANT: The doclet needs access to both the source code _and_
 the compiled version of the tasks/types to document. This is so because
-AntDoclet it uses the same runtime-reflection mechanism that Ant itself uses
+AntDoclet uses the same runtime-reflection mechanism that Ant itself uses
 to find valid properties and nested elements from each task/type.
 
 
