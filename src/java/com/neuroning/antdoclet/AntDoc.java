@@ -183,7 +183,7 @@ public class AntDoc implements Comparable {
         Tag[] firstTags = doc.firstSentenceTags();
 
         if (firstTags.length > 0 && firstTags[0] != null)
-            return firstTags[0].text();
+			return firstTags[0].text();
 
         return null;
 
@@ -253,27 +253,11 @@ public class AntDoc implements Comparable {
      *               required
      */
     public String getAttributeRequired(String attribute) {
-
-        if (doc == null) return null;
-
-        MethodDoc[] methods = doc.methods();
-        String required = null;
-
-        for (int i = 0; i < methods.length; i++) {
-
-            // we give priority to the documentation on the "setter" method of
-            // the attribute
-            // but if the documentation is only on the "getter", use it
-            if (methods[i].name().equalsIgnoreCase("set" + attribute))
-                required = Util.tagValue(methods[i], "ant.required");
-
-            else if (required == null
-                     && methods[i].name().equalsIgnoreCase("get" + attribute))
-                required = Util.tagValue(methods[i], "ant.required");
-
+        MethodDoc method = getMethodFor(this.doc, attribute);
+        if (method == null) {
+        	return null;
         }
-
-        return required;
+        return Util.tagValue(method, "ant.required");
     }
 
     /**
@@ -286,26 +270,11 @@ public class AntDoc implements Comparable {
      *               non-required
      */
     public String getAttributeNotRequired(String attribute) {
-        if (doc == null) return null;
-
-        MethodDoc[] methods = doc.methods();
-        String notrequired = null;
-
-        for (int i = 0; i < methods.length; i++) {
-
-            // we give priority to the documentation on the "setter" method of
-            // the attribute
-            // but if the documentation is only on the "getter", use it
-            if (methods[i].name().equalsIgnoreCase("set" + attribute))
-                notrequired = Util.tagValue(methods[i], "ant.not-required");
-
-            else if (notrequired == null
-                     && methods[i].name().equalsIgnoreCase("get" + attribute))
-                notrequired = Util.tagValue(methods[i], "ant.not-required");
-
+        MethodDoc method = getMethodFor(this.doc, attribute);
+        if (method == null) {
+        	return null;
         }
-
-        return notrequired;
+        return Util.tagValue(method, "ant.not-required");
     }
 
     /**
@@ -322,11 +291,11 @@ public class AntDoc implements Comparable {
                                                     "category");
 
         if (antCategory == null)
-            antCategory = Util.tagAttributeValue(this.doc, "ant.type",
+			antCategory = Util.tagAttributeValue(this.doc, "ant.type",
                                                  "category");
 
         if (antCategory == null && getContainerDoc() != null)
-            antCategory = getContainerDoc().getAntCategory();
+			antCategory = getContainerDoc().getAntCategory();
 
         return antCategory;
 
@@ -354,7 +323,7 @@ public class AntDoc implements Comparable {
         String antName = Util.tagAttributeValue(this.doc, "ant.task", "name");
         
         if (antName == null)
-            antName = Util.tagAttributeValue(this.doc, "ant.type", "name");
+			antName = Util.tagAttributeValue(this.doc, "ant.type", "name");
 
         // Handle inner class case
         if (antName == null && getContainerDoc() != null) {
@@ -417,36 +386,57 @@ public class AntDoc implements Comparable {
     }
 
     /**
+     * Retrieves the method comment for the given attribute.
+     * The comment of the setter is used preferably to the getter comment.
      * 
      * @param attribute
      * @return The comment for the specified attribute
      */
     public String getAttributeComment(String attribute) {
-        if (doc == null) return null;
-
-        MethodDoc[] methods = doc.methods();
-        String comment = "";
-
+        MethodDoc method = getMethodFor(this.doc, attribute);
+        if (method == null) {
+        	return new String();
+        }
+        return method.commentText();
+    }
+    
+    /**
+     * Searches the given class for the appropriate setter or getter for the given attribute.
+     * This method only returns the getter if no setter is available.
+     * If the given class provides no method declaration, the superclasses are
+     * searched recursively.
+     * 
+     * @param attribute
+     * @param methods
+     * @return The MethodDoc for the given attribute or null if not found
+     */
+    private static MethodDoc getMethodFor(ClassDoc classDoc, String attribute) {
+    	if (classDoc == null) {
+    		return null;
+    	}
+    	MethodDoc result = null;
+    	MethodDoc[] methods = classDoc.methods();
         for (int i = 0; i < methods.length; i++) {
 
             // we give priority to the documentation on the "setter" method of
             // the attribute
             // but if the documentation is only on the "getter", use it
-            if (methods[i].name().equalsIgnoreCase("set" + attribute))
-                comment = methods[i].commentText();
-            else if (Util.empty(comment)
-                     && methods[i].name().equalsIgnoreCase("get" + attribute))
-                comment = methods[i].commentText();
-
+            // we give priority to the documentation on the "setter" method of
+            // the attribute
+            // but if the documentation is only on the "getter", use it
+            if (methods[i].name().equalsIgnoreCase("set" + attribute)) {
+				return methods[i];
+			} else if (methods[i].name().equalsIgnoreCase("get" + attribute)) {
+				result = methods[i];
+			}
         }
-
-        return comment;
+        if (result == null) {
+        	return getMethodFor(classDoc.superclass(), attribute);
+        }
+        return result;
     }
 
     /**
-     * Wheter this Ant Tasks/Types accept characters in their element bodies.
-     * 
-     * Example: &lt;echo&gt;The echo task supports nested
      * characters&lt;/echo&gt;
      * 
      * @return true if this Ant Task/Type expects characters in the element
@@ -484,7 +474,7 @@ public class AntDoc implements Comparable {
                 String[] values = att.getValues();
                 result += "\"" + values[0] + "\"";
                 for (int i = 1; i < values.length; i++)
-                    result += ", \"" + values[i] + "\"";
+					result += ", \"" + values[i] + "\"";
 
                 result += "]";
             } catch (java.lang.IllegalAccessException iae) {
