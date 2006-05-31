@@ -18,7 +18,9 @@
 
 <div id="navigation">
 
-	<h2>$title Ant Libs</h2>
+	<a href="overview.html" target="task">
+		<h2>$title Ant Libs</h2>
+	</a>
 	<p>
 ## Iterate through the Categories
 #foreach( $category in $antroot.getCategories() )
