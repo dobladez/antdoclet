@@ -1,14 +1,24 @@
-Example output from Antdoclet
------------------------------
 
-Instead of showing a toy example, I decided to run AntDoclet over
-the source code of the actual Ant Core tasks themselves.
+Example from FuegoBPM
+----------------------
+
+AntDoclet was started as an effort to document the Ant tasks provided
+by the FuegoBPM product (now BEA's AquaLogic BPM):
+
+ * [FuegoBPM tasks reference doc in HTML](http://edocs.bea.com/albsi/docs55/antlib/index.html)
+ * [FuegoBPM tasks reference doc in PDF](http://edocs.bea.com/albsi/docs55/pdfs/Fuego55-Ant.pdf)
+
+
+
+Example from Ant Core tasks 
+---------------------------
+
+I run AntDoclet over the source code of the actual Ant Core tasks, and here's
+the result.
 
 Since these tasks' source code is _not_
 "AntDoclet-aware" (not all @tags are used, invalid HTML in comments,
 etc) the result is far from perfect, specially on the LaTeX/PDF output.
-If you follow AntDoclet conventions in your own Ant tasks, the
-generated output will be better than this example:</p>
 
  * [Core Ant tasks reference doc in HTML](html/index.html)
  * [Core Ant tasks reference doc in PDF](pdf/anttasks-manual.pdf)

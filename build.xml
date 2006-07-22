@@ -17,7 +17,7 @@ Tasks.
 	<property name="root.home" value="root" />
 	<property name="templates.home" value="templates" />
 
-	<property name="dist.name" value="antdoclet-1.0" />
+	<property name="dist.name" value="antdoclet-1.1" />
 
 
 	<!-- Compilation Classpath ===== -->
