@@ -86,9 +86,7 @@ output may be broken. Some suggestions:
 
 <hr />
 
-I did the initial development of AntDoclet during work time at [Fuego Inc.](http://fuego.com), which was later acquired by [BEA Systems](http://bea.com), my current employer.
-
 Thanks,
 
-Fernando Dobladez -- <http://neuroning.com>
+Fernando Dobladez (<http://code54.com>)
 

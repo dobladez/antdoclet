@@ -83,7 +83,9 @@ Tasks.
 
 		<copy todir="${dist.target}">
 			<fileset dir="${root.home}" />
+                        <fileset dir="${basedir}" includes="README.md"/>
 		</copy>
+
 
 		<mkdir dir="${dist.target}/lib" />
 		<copy todir="${dist.target}/lib">
@@ -134,7 +136,7 @@ Tasks.
 
 			<header filtering="no" file="src/web/header.html" />
 			          
-			<fileset dir="root" includes="README"/>
+			<fileset dir="${basedir}" includes="README.md"/>
 			<filterchain>
 				<filterreader classname="com.petebevin.markdown.MarkdownFilter">
 					<classpath refid="compile.classpath"/>
