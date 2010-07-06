@@ -129,7 +129,7 @@ Tasks.
 	</target>
 
 	<!-- Web Target ===== -->
-	<target name="web">
+	<target name="web" description="Generate static project web site" depends="init">
 		<mkdir dir="web"/>
 
 		<concat destfile="web/index.html" append="false">

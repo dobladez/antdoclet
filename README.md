@@ -8,7 +8,7 @@ source code of your custom Ant Tasks/Types. It's been only tested with
 JDK 1.4.
 
 It uses template-based generation, using
-[Velocity](http://jakarta.apache.org/velocity/). This makes it simple to
+[Velocity](http://velocity.apache.org/). This makes it simple to
 create new deliverables or modify the ones provided.  The example
 templates generate HTML and LaTeX (PDF) and are located under the
 `templates/` directory.
