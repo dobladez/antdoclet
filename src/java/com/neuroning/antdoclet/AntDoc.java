@@ -37,6 +37,12 @@ import com.sun.javadoc.ClassDoc;
 import com.sun.javadoc.MethodDoc;
 import com.sun.javadoc.RootDoc;
 import com.sun.javadoc.Tag;
+import java.lang.reflect.Method;
+import java.lang.reflect.Parameter;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
 
 /**
  * An object of this class represents a Java class that is: an Ant Task, or an
@@ -45,7 +51,7 @@ import com.sun.javadoc.Tag;
  * It provides information about the Task/Type's attributes, nested elements and
  * more.
  * 
- * It's intented to be used for documenting Ant Tasks/Types
+ * It's intended to be used for documenting Ant Tasks/Types
  * 
  * @author Fernando Dobladez <dobladez@gmail.com>
  */
@@ -193,14 +199,16 @@ public class AntDoc implements Comparable {
      * Get the attributes in this class from Ant's point of view.
      * 
      * @return Collection of Ant attributes, excluding those inherited from
-     *               org.apache.tools.ant.Task
+     * org.apache.tools.ant.Task, or null if there are none
      */
     public Collection getAttributes() {
         ArrayList attrs = Collections.list(introHelper.getAttributes());
 
-        // filter out all attributes inherited from Task, since they are
-        // common to all Ant Tasks and tend to confuse
-        try {
+        if (attrs.isEmpty()) return null;
+        else {
+          // filter out all attributes inherited from Task, since they are
+          // common to all Ant Tasks and tend to confuse
+          try {
             BeanInfo beanInfo = Introspector.getBeanInfo(Task.class);
             PropertyDescriptor[] commonProps = beanInfo
                     .getPropertyDescriptors();
@@ -211,19 +219,93 @@ public class AntDoc implements Comparable {
                 attrs.remove(propName);
             }
 
-        } catch (Exception e) {
-            // ignore
-        }
+          } catch (Exception e) {
+            e.printStackTrace();
+          }
 
-        return attrs;
+          return attrs;
+        }
     }
 
     /**
      * 
-     * @return a collection of the "Nested Elements" that this Ant tasks accepts
+     * @return a collection of the "Nested Elements" that this Ant tasks accepts, or null if there are none
      */
-    public Enumeration getNestedElements() {
-        return introHelper.getNestedElements();
+    public Iterator<String> getNestedElements() {
+      Enumeration elements = introHelper.getNestedElements();
+      if (elements.hasMoreElements())
+      {
+      Collection c = new HashSet<String>();
+      while (elements.hasMoreElements()) {
+        c.add(elements.nextElement());
+      }
+      return c.iterator();
+      }
+      
+      else {
+        return null;
+      }
+    }
+
+    /**
+     * Get the extension points for this class. 
+     * Derived from the add(instance) or addConfigured(instance) methods.
+     * Each class is technically an Ant type, but typically you wont want to document it; just its concrete implementations.
+     * You can pass these strings to getImplementingClasses() to finds the available implementations.
+     * @return The fully qualified class names, or null if there are none
+     */
+    public Iterator<String> getNestedTypes() {
+      List<Method> mm = introHelper.getExtensionPoints();
+      if (mm.isEmpty()) {
+        return null;
+      }
+      else {
+        Collection c = new HashSet<String>();
+        for(Method m:mm)
+        {
+          String classname = m.getParameterTypes()[0].getName();
+          c.add(classname);
+        }
+        return c.iterator();
+      }
+    }
+    
+    /** 
+     * Find all subclasses of the given abstract class or interface.
+     * Does NOT match the class itself. 
+     */
+    public Iterator<String> getImplementingClasses(String className)
+    {
+      List<String> imps = new ArrayList<String>();
+      ClassDoc thisClass = rootdoc.classNamed(className);
+      for (ClassDoc cd : rootdoc.classes()) {
+        if (cd.subclassOf(thisClass) && !cd.qualifiedName().equals(className)) {
+          imps.add(cd.qualifiedName());
+        }
+      }
+      return imps.iterator();
+    }
+    
+    /**
+     * Get the AntDoc for the specified (arbitrary) class.
+     * 
+     * @param className
+     * @return null if the class cannot be found on the classpath.
+     */
+    public AntDoc getTypeDoc(String className)
+    {
+      return getInstance(className, rootdoc);
+    }
+
+    /**
+     * Get the comment for the add or addconfigured method for the specified class (extension).
+     * 
+     * @return The source comment (description), or null if the class cannot be found.
+     */
+    public String getCommentForType(String type) {
+      notNull(type, "type");
+      MethodDoc m = getMethodForType(doc, type);
+      return m==null ? null : m.commentText();
     }
 
     public String getFullClassName() {
@@ -312,7 +394,7 @@ public class AntDoc implements Comparable {
     }
 
     /**
-     * Return the name of this type from Ant's perpective
+     * Return the name of this type from Ant's perspective
      * 
      * @returns The value of the
      * @ant.task or
@@ -373,11 +455,6 @@ public class AntDoc implements Comparable {
                            this.rootdoc);
     }
 
-    // public Class getAttributeType(String attributeName)
-    // {
-    // return introHelper.getAttributeType(attributeName);
-    // }
-
     /**
      * Return the name of the type for the specified attribute
      */
@@ -434,6 +511,40 @@ public class AntDoc implements Comparable {
         	return getMethodFor(classDoc.superclass(), attribute);
         }
         return result;
+    }
+
+    /**
+     * Searches the given class for the appropriate setter or getter for the given attribute.
+     * This method only returns the getter if no setter is available.
+     * If the given class provides no method declaration, the superclasses are
+     * searched recursively.
+     * 
+     * @param attribute
+     * @param methods
+     * @return The MethodDoc for the given attribute or null if not found
+     */
+    private static MethodDoc getMethodForType(ClassDoc classDoc, String nestedType) {
+      notNull(classDoc, "classDoc");
+      notNull(nestedType, "nestedType");
+
+      MethodDoc result = null;
+      MethodDoc[] methods = classDoc.methods();
+      for (MethodDoc method : methods) {
+        if (method.name().equalsIgnoreCase("add")||method.name().equalsIgnoreCase("addConfigured")) {
+          com.sun.javadoc.Parameter[] params = method.parameters();
+          if (params.length == 1) {
+            // Ugly. I have the method, why can't Javadoc give me the comment directly?
+            if (nestedType.endsWith(params[0].type().typeName())) { 
+              result = method;
+              break;
+            }
+          }
+        }
+      }
+      if (result == null && classDoc.superclass() != null) {
+        return getMethodForType(classDoc.superclass(), nestedType);
+      }
+      return result;
     }
 
     /**
@@ -499,4 +610,22 @@ public class AntDoc implements Comparable {
         return fullName1.compareTo(fullName2);
     }
 
+    
+    /**
+     * Argument check for methods - not nullable.
+     * 
+     * Typed, so you can use instancevar = notNull(arg,"arg");
+     * 
+     * @param <T>
+     * @param t
+     * @param msg Message for 
+     * @throws NullPointerException if t is null
+     * @return 
+     */
+    public static <T> T notNull(T t, String msg) {
+        if (t == null) {
+            throw new NullPointerException(msg);
+        }
+        return t;
+    }
 }
