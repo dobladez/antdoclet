@@ -60,7 +60,7 @@ Tasks.
 	<!-- Build Target ===== -->
 	<target name="build" description="Compile all Java code" depends="init">
 
-		<javac srcdir="${src.home}" destdir="${build.home}/classes" debug="true" deprecation="true">
+		<javac srcdir="${src.home}" destdir="${build.home}/classes" debug="true" deprecation="true" includeantruntime="true">
 
 			<include name="**/*.java" />
 			<classpath refid="compile.classpath" />
